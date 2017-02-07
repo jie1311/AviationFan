@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Aviation Fan</title>
+</head>
+<body>
+<ul>
+    <li th:each="air:${airs}" th:text="${air}">Airport</li>
+</ul>
+<a href="/">back home</a>
+</body>
+</html>
