@@ -2,6 +2,9 @@ package application;
 
 import entities.Aircraft;
 import entities.Airport;
+import org.springframework.security.crypto.codec.Base64;
+
+import java.nio.charset.Charset;
 
 public class Calculator {
 
@@ -34,5 +37,16 @@ public class Calculator {
         } else {
             return false;
         }
+    }
+
+    public static String base64Encode(String token) {
+        byte[] encodedBytes = Base64.encode(token.getBytes());
+        return new String(encodedBytes, Charset.forName("UTF-8"));
+    }
+
+
+    public static String base64Decode(String token) {
+        byte[] decodedBytes = Base64.decode(token.getBytes());
+        return new String(decodedBytes, Charset.forName("UTF-8"));
     }
 }

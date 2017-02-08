@@ -2,6 +2,7 @@ package application;
 
 import entities.Aircraft;
 import entities.Airport;
+import entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import repositories.AircraftRepository;
 import repositories.AirportRepository;
+import repositories.UserRepository;
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = {"repositories"})
@@ -20,6 +22,9 @@ public class Initializer implements CommandLineRunner {
     @Autowired
     private AirportRepository airportRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(Initializer.class, args);
     }
@@ -29,6 +34,7 @@ public class Initializer implements CommandLineRunner {
 
 //        aircraftInitial();
 //        airportInitial();
+//        userInitial();
 
         for (Aircraft aircraft : aircraftRepository.findAll()) {
             System.out.println(aircraft.getType());
@@ -40,7 +46,7 @@ public class Initializer implements CommandLineRunner {
 
     }
 
-    public void aircraftInitial() {
+    private void aircraftInitial() {
         aircraftRepository.deleteAll();
 
         aircraftRepository.save(new Aircraft("Airbus", "A350", "900", 15000, 325));
@@ -51,7 +57,7 @@ public class Initializer implements CommandLineRunner {
 
     }
 
-    public void airportInitial() {
+    private void airportInitial() {
         airportRepository.deleteAll();
 
         double[] mel = {-37.673333, 144.843333};
@@ -61,6 +67,15 @@ public class Initializer implements CommandLineRunner {
         double[] lhr = {51.4775, -0.461389};
         airportRepository.save(new Airport("LHR", "London", lhr));
 
+    }
+
+    private void userInitial() {
+        userRepository.deleteAll();
+
+        String psd = Calculator.base64Encode("password");
+        userRepository.save(new User("user", psd));
+        String psd2 = Calculator.base64Encode("password");
+        userRepository.save(new User("user2", psd2));
     }
 
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Aviation Fan</title>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <th>Aircraft Type</th>
+            <th>Range</th>
+            <th>Capacity</th>
+        </tr>
+        <tr th:each="air:${airs}">
+            <td th:text="${air.getType()}"></td>
+            <td th:text="${air.getRange()}"></td>
+            <td th:text="${air.getCapacity()}"></td>
+        </tr>
+    </table>
+
+    <!--<ul>-->
+        <!--<li th:each="air:${airs}" th:text="${air.getType()}">Aircraft Models</li>-->
+    <!--</ul>-->
+
+    <p>Add a new aircraft type: <br />
+        <form action="#" th:action="@{/aircraft}" th:object="${aircraftForm}" method="post">
+            <input type="text" required="required" placeholder="Manufacturer" th:field="*{manufacturer}" />
+            <input type="text" required="required" placeholder="Model" th:field="*{model}" />
+            <input type="text" required="required" placeholder="Submodel" th:field="*{subModel}" />
+            <input type="number" required="required" placeholder="Range(km)" th:field="*{range}" />
+            <input type="number" required="required" placeholder="Capacity(people)" th:field="*{capacity}" />
+            <p>
+                <button type="submit">Submit</button>
+            </p>
+        </form>
+    </p>
+    <p th:text="${added}"></p>
+    <p>Click <a href="/editAircraft">here</a> to edit the aircraft data.</p>
+    <p>Click <a href="/">here</a> to go back home.</p>
+</body>
+</html>
