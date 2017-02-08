@@ -2,6 +2,7 @@ package entities;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Airport {
@@ -75,5 +76,11 @@ public class Airport {
                     Objects.equals(iataCode, airport.getIataCode()) &&
                     Objects.equals(city, airport.getCity());
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{\"iata\":\"%s\", \"city\":\"%s\", \"long\":%f, \"lat\":%f}",
+                iataCode, city, coordinate[0], coordinate[1]);
     }
 }

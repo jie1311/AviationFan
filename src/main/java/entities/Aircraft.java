@@ -71,4 +71,11 @@ public class Aircraft {
     public String getType() {
         return String.format("%s %s-%s", manufacturer, model, subModel);
     }
+
+    @Override
+    public String toString() {
+        return String.format("{\"manufacturer\":\"%s\", \"model\":\"%s\", \"submodel\":\"%s\", \"range\":%d, \"capacity\":%d}",
+                manufacturer, model, subModel, range, capacity);
+    }
 }
+
