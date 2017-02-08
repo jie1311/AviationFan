@@ -25,7 +25,9 @@ public class AirportRestController {
             } else if (iataCode != null) {
                 airportsJson += String.format("%s, ", repository.findByIataCode(iataCode).toString());
             } else {
-                airportsJson += String.format("%s, ", repository.findByCity(city).toString());
+                for (Airport airport : repository.findByCity(city)) {
+                    airportsJson += String.format("%s, ", airport.toString());
+                }
             }
             airportsJson = airportsJson.substring(0, airportsJson.length() - 2);
         } catch (Exception e) {
