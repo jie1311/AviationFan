@@ -39,6 +39,14 @@ public class Calculator {
         }
     }
 
+    public static boolean reachable(Airport org, Airport des, int range) {
+        if (range > destance(org, des)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static String base64Encode(String token) {
         byte[] encodedBytes = Base64.encode(token.getBytes());
         return new String(encodedBytes, Charset.forName("UTF-8"));

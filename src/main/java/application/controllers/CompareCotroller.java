@@ -110,7 +110,7 @@ public class CompareCotroller {
                 }
                 if (!origin) {
                     searched.add(via);
-                    searchResult(via, des,aircraft,searched, result);
+                    searchResult(via, des, aircraft, searched, result);
                     break out;
                 }
             }
