@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Aviation Fan</title>
+</head>
+<body>
+
+    <form action="#" th:action="@{/editUser}" th:object="${editUserForm}" method="post">
+        <h3>Add a new user:</h3>
+        <input type="text" required="required" placeholder="Username" th:field="*{username}" />
+        <input type="password" required="required" placeholder="Password" th:field="*{password}" />
+        <input type="password" required="required" placeholder="Confirm password" th:field="*{password2}" />
+        <p><button type="submit">Add</button></p>
+    </form>
+    <p th:text="${added}"></p>
+
+    <form action="#" th:action="@{/editUser}" th:object="${editUserForm}" method="post">
+        <h3>Delete an user:</h3>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="user:${users}">
+                <td th:text="${user.getUsername()}"></td>
+                <td> <input type="radio" th:field="*{deletedId}" th:value="${user.getId()}" required="required"/></td>
+            </tr>
+        </table>
+        <p><button type="submit">Delete</button></p>
+    </form>
+    <p th:text="${deleted}"></p>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+    <p>Click <a href="/">here</a> to go back home.</p>
+</body>
+</html>
