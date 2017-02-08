@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Aviation Fan</title>
+</head>
+<body>
+
+    <form action="#" th:action="@{/editAirport}" th:object="${editAirportForm}" method="post">
+        <h3>Add a new airport:</h3>
+        <input type="text" required="required" placeholder="IATA Code" th:field="*{iataCode}" />
+        <input type="text" required="required" placeholder="City" th:field="*{city}" />
+        <input type="text" required="required" placeholder="longitude" th:field="*{longitude}" />
+        <input type="text" required="required" placeholder="latitude" th:field="*{latitude}" />
+        <p><button type="submit">Add</button></p>
+    </form>
+    <p th:text="${added}"></p>
+
+    <form action="#" th:action="@{/editAirport}" th:object="${editAirportForm}" method="post">
+        <h3>Delete an airport:</h3>
+        <table>
+            <tr>
+                <th>IATA Code</th>
+                <th>City</th>
+                <th>Long</th>
+                <th>Lat</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="airport:${airports}">
+                <td th:text="${airport.getIataCode()}"></td>
+                <td th:text="${airport.getCity()}"></td>
+                <td th:text="${airport.getCoordinate()[0]}"></td>
+                <td th:text="${airport.getCoordinate()[1]}"></td>
+                <td> <input type="radio" th:field="*{deletedId}" th:value="${airport.getId()}" required="required"/></td>
+            </tr>
+        </table>
+        <p><button type="submit">Delete</button></p>
+    </form>
+    <p th:text="${deleted}"></p>
+
+    <form action="#" th:action="@{/editAirport}" th:object="${editAirportForm}" method="post">
+        <h3>Edit an airport:</h3>
+        <table>
+            <tr>
+                <th>IATA Code</th>
+                <th>City</th>
+                <th>Long</th>
+                <th>Lat</th>
+                <th>Edit</th>
+            </tr>
+            <tr th:each="airport:${airports}">
+                <td th:text="${airport.getIataCode()}"></td>
+                <td th:text="${airport.getCity()}"></td>
+                <td th:text="${airport.getCoordinate()[0]}"></td>
+                <td th:text="${airport.getCoordinate()[1]}"></td>
+                <td> <input type="radio" th:field="*{editId}" th:value="${airport.getId()}" required="required"/></td>
+            </tr>
+        </table>
+        <input type="text" required="required" placeholder="IATA Code" th:field="*{iataCode}" />
+        <input type="text" required="required" placeholder="City" th:field="*{city}" />
+        <input type="text" required="required" placeholder="longitude" th:field="*{longitude}" />
+        <input type="text" required="required" placeholder="latitude" th:field="*{latitude}" />
+        <p><button type="submit">Edit</button></p>
+    </form>
+    <p th:text="${edited}"></p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+
+<p>Click <a href="/">here</a> to go back home.</p>
+</body>
+</html>
