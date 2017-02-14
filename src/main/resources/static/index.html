@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Aviation Fan Management</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -12,7 +12,7 @@
         function drawSeriesChart() {
 
             var jsonData = $.ajax({
-                url: "http://localhost:8080/getAircraft",
+                url: "getAircraft",
                 dataType: "json",
                 async: false
             }).responseText;
