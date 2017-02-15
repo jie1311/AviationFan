@@ -1,0 +1,58 @@
+.indexNav {
+    border-radius: 0;
+    background-color: #4b9bcb;
+    border: 0;
+    margin: 0;
+}
+
+.indexFont {
+    font-family: "Gurmukhi MN";
+}
+
+.nav.navbar-nav li a {
+    color: #a6c9e8;
+}
+
+.nav.navbar-nav a:hover {
+    color: #ffffff;
+}
+
+.active a{
+    background-color: #1c81be !important;
+}
+
+.indexNavBt {
+    border: 0;
+}
+
+.navbar-collapse
+{
+    border: 0 !important;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #a6c9e8;
+}
+
+.indexImg {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    width: 100%;
+}
+
+.noBorder {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.topPadding {
+    padding-top: 15px;
+}
+
+.fullWide {
+    width: 100% !important;
+}
+

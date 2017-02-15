@@ -2,21 +2,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Aviation Fan Management</title>
+    <title>Aviation Fan Management - Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
+
+<nav class="navbar navbar-inverse indexFont indexNav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle indexNavBt" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Aviation Fan</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="http://localhost:9000/">Home</a></li>
+                <li><a href="http://localhost:9000/aircraft">Aircraft</a></li>
+                <li><a href="#">Airports</a></li>
+                <li><a href="#">Routes</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/">Management</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid indexFont">
+    <div class="row">
+        <div class="col-sm-8 noBorder">
+            <img src="indexPic.jpg" class="indexImg"/>
+        </div>
+        <div class="col-sm-4 topPadding">
+            <div th:if="${param.error}">
+                Invalid username and password.
+            </div>
+            <div th:if="${param.logout}">
+                You have been logged out.
+            </div>
+            <form th:action="@{/login}" method="post">
+                <p>User Name: <input type="text" name="username" class="form-control fullWide"/></p>
+                <p>Password: <input type="password" name="password" class="form-control fullWide"/></p>
+                <p><button type="submit" class="btn btn-primary fullWide">Sign In</button></p>
+            </form>
+        </div>
+    </div>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
-<p>Click <a href="/">here</a> to go back home.</p>
 
 </body>
 </html>
