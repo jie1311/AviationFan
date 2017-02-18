@@ -56,3 +56,27 @@
     width: 100% !important;
 }
 
+.halfWide {
+    width: 50% !important;
+}
+
+.fullHeight {
+    height: 100% !important;
+}
+
+.lrPadding {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.topPaddingMuch {
+    padding-top: 50px;
+    padding-bottom: 45px;
+}
+
+.indexFot {
+    border-radius: 0;
+    background-color: #a6c9e8;
+    border: 0;
+    margin: 0;
+}

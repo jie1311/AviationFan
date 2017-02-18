@@ -1,76 +1,175 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" >
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Aviation Fan Management</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Aviation Fan Management - Aircraft</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-inverse indexFont indexNav navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle indexNavBt" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Aviation Fan</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="http://localhost:9000/">Home</a></li>
+                <li><a href="http://localhost:9000/aircraft">Aircraft</a></li>
+                <li><a href="#">Airports</a></li>
+                <li><a href="#">Routes</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="lrPadding"><form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-danger navbar-btn fullWide">Sign Out</button>
+                </form></li>
+                <li class="active"><a href="/">Management</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<!--<ul>-->
-<!--<li th:each="air:${airs}" th:text="${air.getType()}">Aircraft Models</li>-->
-<!--</ul>-->
+<div class="container-fluid indexFont topPaddingMuch">
+    <div class="row">
+        <div class="col-sm-8 topPadding">
+            <h3>Add a new aircraft type: </h3>
+            <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
+                <p>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Manufacturer"
+                               th:field="*{manufacturer}"/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Model"
+                               th:field="*{model}"/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Submodel"
+                               th:field="*{subModel}"/>
+                    </div>
+                </div>
+                </p>
+                <p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" required="required" placeholder="Range(km)"
+                               th:field="*{range}"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" required="required" placeholder="Capacity(people)"
+                               th:field="*{capacity}"/>
+                    </div>
+                </div>
+                </p>
+                <p>
+                    <button type="submit" class="btn btn-primary halfWide">Add</button>
+                </p>
+            </form>
+            <p th:text="${added}"></p>
 
-    <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
-        <h3>Add a new aircraft type: </h3>
-        <input type="text" required="required" placeholder="Manufacturer" th:field="*{manufacturer}" />
-        <input type="text" required="required" placeholder="Model" th:field="*{model}" />
-        <input type="text" required="required" placeholder="Submodel" th:field="*{subModel}" />
-        <input type="number" required="required" placeholder="Range(km)" th:field="*{range}" />
-        <input type="number" required="required" placeholder="Capacity(people)" th:field="*{capacity}" />
-        <p><button type="submit">Add</button></p>
-    </form>
-    <p th:text="${added}"></p>
+            <h3>Delete an aircraft type: </h3>
+            <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
+                <p>
+                <div class="pre-scrollable">
+                    <table class="table-hover fullWide">
+                        <tr>
+                            <th class="col-md-6">Aircraft Type</th>
+                            <th class="col-md-2">Range</th>
+                            <th class="col-md-2">Capacity</th>
+                            <th class="col-md-2">Delete</th>
+                        </tr>
+                        <tr th:each="air:${airs}">
+                            <td class="col-md-6" th:text="${air.getType()}"></td>
+                            <td class="col-md-2" th:text="${air.getRange()}"></td>
+                            <td class="col-md-2" th:text="${air.getCapacity()}"></td>
+                            <td class="col-md-2"><input type="radio" th:field="*{deletedId}" th:value="${air.getId()}"
+                                                        required="required"/></td>
+                        </tr>
+                    </table>
+                </div>
+                </p>
+                <p>
+                    <button type="submit" class="btn btn-primary halfWide">Delete</button>
+                </p>
+            </form>
+            <p th:text="${deleted}"></p>
 
-    <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
-        <h3>Delete an aircraft type: </h3>
-        <table>
-            <tr>
-                <th>Aircraft Type</th>
-                <th>Range</th>
-                <th>Capacity</th>
-                <th>Delete</th>
-            </tr>
-            <tr th:each="air:${airs}">
-                <td th:text="${air.getType()}"></td>
-                <td th:text="${air.getRange()}"></td>
-                <td th:text="${air.getCapacity()}"></td>
-                <td> <input type="radio" th:field="*{deletedId}" th:value="${air.getId()}" required="required"/></td>
-            </tr>
-        </table>
-        <p><button type="submit">Delete</button></p>
-    </form>
-    <p th:text="${deleted}"></p>
+            <h3>Edit an aircraft type: </h3>
+            <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
+                <div class="pre-scrollable">
+                    <table class="table-hover fullWide">
+                        <tr>
+                            <th class="col-md-6">Aircraft Type</th>
+                            <th class="col-md-2">Range</th>
+                            <th class="col-md-2">Capacity</th>
+                            <th class="col-md-2">Edit</th>
+                        </tr>
+                        <tr th:each="air:${airs}">
+                            <td class="col-md-6" th:text="${air.getType()}"></td>
+                            <td class="col-md-2" th:text="${air.getRange()}"></td>
+                            <td class="col-md-2" th:text="${air.getCapacity()}"></td>
+                            <td class="col-md-2"><input type="radio" th:field="*{editId}" th:value="${air.getId()}"
+                                                        required="required"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Manufacturer"
+                               th:field="*{manufacturer}"/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Model"
+                               th:field="*{model}"/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" required="required" placeholder="Submodel"
+                               th:field="*{subModel}"/>
+                    </div>
+                </div>
+                </p>
+                <p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" required="required" placeholder="Range(km)"
+                               th:field="*{range}"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" required="required" placeholder="Capacity(people)"
+                               th:field="*{capacity}"/>
+                    </div>
+                </div>
+                </p>
+                <p>
+                    <button type="submit" class="btn btn-primary halfWide">Edit</button>
+                </p>
+            </form>
+            <p th:text="${edited}"></p>
+        </div>
+        <div class="col-sm-4 topPadding">
+            <p><a href="editAircraft" class="btn btn-primary fullWide">Manage aircraft types</a></p>
+            <p><a href="editAirport" class="btn btn-primary fullWide">Manage airports</a></p>
+            <p><a href="editUser" class="btn btn-primary fullWide">Manage managers</a></p>
+            <p><a href="compare" class="btn btn-primary fullWide">Check routes</a></p>
+        </div>
+    </div>
+</div>
 
-    <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
-        <h3>Edit an aircraft type: </h3>
-        <table>
-            <tr>
-                <th>Aircraft Type</th>
-                <th>Range</th>
-                <th>Capacity</th>
-                <th>Edit</th>
-            </tr>
-            <tr th:each="air:${airs}">
-                <td th:text="${air.getType()}"></td>
-                <td th:text="${air.getRange()}"></td>
-                <td th:text="${air.getCapacity()}"></td>
-                <td> <input type="radio" th:field="*{editId}" th:value="${air.getId()}" required="required"/></td>
-            </tr>
-        </table>
-        <p>
-        <input type="text" required="required" placeholder="Manufacturer" th:field="*{manufacturer}" />
-        <input type="text" required="required" placeholder="Model" th:field="*{model}" />
-        <input type="text" required="required" placeholder="Submodel" th:field="*{subModel}" />
-        <input type="number" required="required" placeholder="Range(km)" th:field="*{range}" />
-        <input type="number" required="required" placeholder="Capacity(people)" th:field="*{capacity}" />
-        </p>
-        <p><button type="submit">Edit</button></p>
-    </form>
-    <p th:text="${edited}"></p>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
-    <p>Click <a href="/">here</a> to go back home.</p>
+<footer class="footer indexFont navbar-fixed-bottom indexFot">
+    <div class="container">
+        <p class="text-muted topPadding">Aviation Fan (c) 2017</p>
+    </div>
+</footer>
 </body>
 </html>

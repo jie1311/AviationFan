@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>Aviation Fan Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<nav class="navbar navbar-inverse indexFont indexNav">
+<nav class="navbar navbar-inverse indexFont indexNav navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle indexNavBt" data-toggle="collapse" data-target="#myNavbar">
@@ -28,24 +28,33 @@
                 <li><a href="#">Routes</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li class="lrPadding"><form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-danger navbar-btn fullWide">Sign Out</button>
+                </form></li>
                 <li class="active"><a href="#">Management</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid indexFont">
+<div class="container-fluid indexFont topPaddingMuch">
     <div class="row">
         <div class="col-sm-8 noBorder">
             <img src="img/indexPic.jpg" class="indexImg"/>
         </div>
         <div class="col-sm-4 topPadding">
-            <p>Click <a href="editAircraft">here</a> to manage all the aircraft types.</p>
-            <p>Click <a href="editAirport">here</a> to manage all the airports.</p>
-            <p>Click <a href="editUser">here</a> to manage all the users.</p>
-            <p>Click <a href="compare">here</a> to test if an aircraft type can fly A-B.</p>
+            <p><a href="editAircraft" class="btn btn-primary fullWide">Manage aircraft types</a></p>
+            <p><a href="editAirport" class="btn btn-primary fullWide">Manage airports</a></p>
+            <p><a href="editUser" class="btn btn-primary fullWide">Manage managers</a></p>
+            <p><a href="compare" class="btn btn-primary fullWide">Check routes</a></p>
         </div>
     </div>
 </div>
+
+<footer class="footer indexFont navbar-fixed-bottom indexFot">
+    <div class="container">
+        <p class="text-muted topPadding">Aviation Fan (c) 2017</p>
+    </div>
+</footer>
 </body>
 </html>
