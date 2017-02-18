@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="css/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function fillIn(air) {
+            airObj = JSON.parse(air);
+            document.getElementById("iata").value = airObj.iata;
+            document.getElementById("cccc").value = airObj.city;
+            document.getElementById("long").value = airObj.long;
+            document.getElementById("lat").value = airObj.lat;
+        }
+    </script>
 </head>
 <body>
 
@@ -121,18 +130,18 @@
                             <td class="col-md-2" th:text="${airport.getCoordinate()[0]}"></td>
                             <td class="col-md-2" th:text="${airport.getCoordinate()[1]}"></td>
                             <td class="col-md-2"><input type="radio" th:field="*{editId}" th:value="${airport.getId()}"
-                                                        required="required"/></td>
+                                                        required="required" th:onclick="'fillIn(\'' + ${airport} + '\')'"/></td>
                         </tr>
                     </table>
                 </div>
                 <p>
                 <div class="row">
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" required="required" placeholder="IATA Code"
+                        <input id="iata" type="text" class="form-control" required="required" placeholder="IATA Code"
                                th:field="*{iataCode}"/>
                     </div>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" required="required" placeholder="City"
+                        <input id="cccc" type="text" class="form-control" required="required" placeholder="City"
                                th:field="*{city}"/>
                     </div>
                 </div>
@@ -140,11 +149,11 @@
                 <p>
                 <div class="row">
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" required="required" placeholder="longitude"
+                        <input id="long" type="text" class="form-control" required="required" placeholder="longitude"
                                th:field="*{longitude}"/>
                     </div>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" required="required" placeholder="latitude"
+                        <input id="lat" type="text" class="form-control" required="required" placeholder="latitude"
                                th:field="*{latitude}"/>
                     </div>
                 </div>

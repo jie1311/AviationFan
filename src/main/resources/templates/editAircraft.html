@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="css/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function fillIn(air) {
+            airObj = JSON.parse(air);
+            document.getElementById("man").value = airObj.manufacturer;
+            document.getElementById("mol").value = airObj.model;
+            document.getElementById("sub").value = airObj.submodel;
+            document.getElementById("rng").value = airObj.range;
+            document.getElementById("cpc").value = airObj.capacity;
+        }
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-inverse indexFont indexNav navbar-fixed-top">
@@ -118,7 +128,7 @@
                             <td class="col-md-2" th:text="${air.getRange()}"></td>
                             <td class="col-md-2" th:text="${air.getCapacity()}"></td>
                             <td class="col-md-2"><input type="radio" th:field="*{editId}" th:value="${air.getId()}"
-                                                        required="required"/>
+                                                        required="required" th:onclick="'fillIn(\'' + ${air} + '\')'"/>
                             </td>
                         </tr>
                     </table>
@@ -126,15 +136,15 @@
                 <p>
                 <div class="row">
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" required="required" placeholder="Manufacturer"
+                        <input id="man" type="text" class="form-control" required="required" placeholder="Manufacturer"
                                th:field="*{manufacturer}"/>
                     </div>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" required="required" placeholder="Model"
+                        <input id="mol" type="text" class="form-control" required="required" placeholder="Model"
                                th:field="*{model}"/>
                     </div>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" required="required" placeholder="Submodel"
+                        <input id="sub" type="text" class="form-control" required="required" placeholder="Submodel"
                                th:field="*{subModel}"/>
                     </div>
                 </div>
@@ -142,11 +152,11 @@
                 <p>
                 <div class="row">
                     <div class="col-sm-6">
-                        <input type="number" class="form-control" required="required" placeholder="Range(km)"
+                        <input id="rng" type="number" class="form-control" required="required" placeholder="Range(km)"
                                th:field="*{range}"/>
                     </div>
                     <div class="col-sm-6">
-                        <input type="number" class="form-control" required="required" placeholder="Capacity(people)"
+                        <input id="cpc" type="number" class="form-control" required="required" placeholder="Capacity(people)"
                                th:field="*{capacity}"/>
                     </div>
                 </div>
@@ -156,6 +166,7 @@
                 </p>
             </form>
             <p th:text="${edited}"></p>
+            <p id="demo"></p>
         </div>
         <div class="col-sm-4 topPadding">
             <p><a href="editAircraft" class="btn btn-primary fullWide">Manage aircraft types</a></p>
