@@ -6,8 +6,10 @@
     <title>Aviation Fan Management - Airport</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/tablesorter.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://tablesorter.com/__jquery.tablesorter.min.js"></script>
     <script>
         function fillIn(air) {
             airObj = JSON.parse(air);
@@ -16,6 +18,13 @@
             document.getElementById("long").value = airObj.long;
             document.getElementById("lat").value = airObj.lat;
         }
+
+        $(document).ready(function()
+            {
+                $("#deleteTable").tablesorter();
+                $("#editTable").tablesorter();
+            }
+        );
     </script>
 </head>
 <body>
@@ -88,7 +97,8 @@
             <form action="#" th:action="@{/editAirport}" th:object="${editAirportForm}" method="post">
                 <p>
                 <div class="pre-scrollable">
-                    <table class="table-hover fullWide">
+                    <table id="deleteTable" class="table-hover fullWide tablesorter">
+                        <thead>
                         <tr>
                             <th class="col-md-2">IATA Code</th>
                             <th class="col-md-4">City</th>
@@ -96,6 +106,8 @@
                             <th class="col-md-2">Latitude</th>
                             <th class="col-md-2">Delete</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr th:each="airport:${airports}">
                             <td class="col-md-2" th:text="${airport.getIataCode()}"></td>
                             <td class="col-md-4" th:text="${airport.getCity()}"></td>
@@ -104,6 +116,7 @@
                             <td class="col-md-2"><input type="radio" th:field="*{deletedId}"
                                                         th:value="${airport.getId()}" required="required"/></td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 </p>
@@ -116,7 +129,8 @@
             <h3>Edit an airport: </h3>
             <form action="#" th:action="@{/editAirport}" th:object="${editAirportForm}" method="post">
                 <div class="pre-scrollable">
-                    <table class="table-hover fullWide">
+                    <table id="editTable" class="table-hover fullWide tablesorter">
+                        <thead>
                         <tr>
                             <th class="col-md-2">IATA Code</th>
                             <th class="col-md-4">City</th>
@@ -124,6 +138,8 @@
                             <th class="col-md-2">Latitude</th>
                             <th class="col-md-2">Delete</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr th:each="airport:${airports}">
                             <td class="col-md-2" th:text="${airport.getIataCode()}"></td>
                             <td class="col-md-4" th:text="${airport.getCity()}"></td>
@@ -132,6 +148,7 @@
                             <td class="col-md-2"><input type="radio" th:field="*{editId}" th:value="${airport.getId()}"
                                                         required="required" th:onclick="'fillIn(\'' + ${airport} + '\')'"/></td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <p>

@@ -6,9 +6,11 @@
     <title>Aviation Fan Management - Aircraft</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/tablesorter.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
+    <script src="http://tablesorter.com/__jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
         function fillIn(air) {
             airObj = JSON.parse(air);
             document.getElementById("man").value = airObj.manufacturer;
@@ -17,9 +19,16 @@
             document.getElementById("rng").value = airObj.range;
             document.getElementById("cpc").value = airObj.capacity;
         }
+
+        $(document).ready(function () {
+                $("#deleteTable").tablesorter();
+                $("#editTable").tablesorter();
+            }
+        );
     </script>
 </head>
 <body>
+
 <nav class="navbar navbar-inverse indexFont indexNav navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -38,9 +47,11 @@
                 <li><a href="#">Routes</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="lrPadding"><form th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-danger navbar-btn fullWide">Sign Out</button>
-                </form></li>
+                <li class="lrPadding">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-danger navbar-btn fullWide">Sign Out</button>
+                    </form>
+                </li>
                 <li class="active"><a href="/">Management</a></li>
             </ul>
         </div>
@@ -90,13 +101,16 @@
             <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
                 <p>
                 <div class="pre-scrollable">
-                    <table class="table-hover fullWide">
+                    <table id="deleteTable" class="table-hover fullWide tablesorter">
+                        <thead>
                         <tr>
                             <th class="col-md-6">Aircraft Type</th>
                             <th class="col-md-2">Range</th>
                             <th class="col-md-2">Capacity</th>
                             <th class="col-md-2">Delete</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr th:each="air:${airs}">
                             <td class="col-md-6" th:text="${air.getType()}"></td>
                             <td class="col-md-2" th:text="${air.getRange()}"></td>
@@ -104,6 +118,7 @@
                             <td class="col-md-2"><input type="radio" th:field="*{deletedId}" th:value="${air.getId()}"
                                                         required="required"/></td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 </p>
@@ -116,13 +131,16 @@
             <h3>Edit an aircraft type: </h3>
             <form action="#" th:action="@{/editAircraft}" th:object="${editAircraftForm}" method="post">
                 <div class="pre-scrollable">
-                    <table class="table-hover fullWide">
+                    <table id="editTable" class="table-hover fullWide tablesorter">
+                        <thead>
                         <tr>
                             <th class="col-md-6">Aircraft Type</th>
                             <th class="col-md-2">Range</th>
                             <th class="col-md-2">Capacity</th>
                             <th class="col-md-2">Edit</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr th:each="air:${airs}">
                             <td class="col-md-6" th:text="${air.getType()}"></td>
                             <td class="col-md-2" th:text="${air.getRange()}"></td>
@@ -131,6 +149,7 @@
                                                         required="required" th:onclick="'fillIn(\'' + ${air} + '\')'"/>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <p>
@@ -156,7 +175,8 @@
                                th:field="*{range}"/>
                     </div>
                     <div class="col-sm-6">
-                        <input id="cpc" type="number" class="form-control" required="required" placeholder="Capacity(people)"
+                        <input id="cpc" type="number" class="form-control" required="required"
+                               placeholder="Capacity(people)"
                                th:field="*{capacity}"/>
                     </div>
                 </div>
@@ -182,5 +202,6 @@
         <p class="text-muted topPadding">Aviation Fan (c) 2017</p>
     </div>
 </footer>
+
 </body>
 </html>
