@@ -1,6 +1,6 @@
 .indexNav {
     border-radius: 0;
-    background-color: #4b9bcb;
+    background-color: #000000;
     border: 0;
     margin: 0;
 }
@@ -10,7 +10,7 @@
 }
 
 .nav.navbar-nav li a {
-    color: #a6c9e8;
+    color: #aaaaaa;
 }
 
 .nav.navbar-nav a:hover {
@@ -18,7 +18,7 @@
 }
 
 .active a{
-    background-color: #1c81be !important;
+    background-color: #333333 !important;
 }
 
 .indexNavBt {
@@ -31,7 +31,7 @@
 }
 
 .navbar-inverse .navbar-brand {
-    color: #a6c9e8;
+    color: #aaaaaa;
 }
 
 .indexImg {
@@ -76,7 +76,18 @@
 
 .indexFot {
     border-radius: 0;
-    background-color: #a6c9e8;
+    background-color: #eeeeee;
+    color: #111111;
     border: 0;
     margin: 0;
+}
+
+.filllax {
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-image: url('../img/indexPic.jpg');
+    height: 100vh !important;
+    margin-bottom: -45px;
+    margin-top: -50px;
 }
