@@ -88,6 +88,8 @@
     background-position: center;
     background-image: url('../img/indexPic.jpg');
     height: 100vh !important;
+    padding-top: 50px;
+    padding-bottom: 45px;
     margin-bottom: -45px;
     margin-top: -50px;
 }
