@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import repositories.AirportRepository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -77,18 +78,22 @@ public class RouteRestController {
             }
         }
         if (!found) {
-            out: for (Airport via : available) {
-                boolean origin = false;
-                in: for (Airport srd : (ArrayList<Airport>) searched) {
+            for(Iterator<Airport> it = available.iterator(); it.hasNext();){
+                Airport via = it.next();
+                in:
+                for (Airport srd : (ArrayList<Airport>) searched) {
                     if (srd.getId().equals(via.getId())) {
-                        origin = true;
+                        it.remove();
                         break in;
                     }
                 }
-                if (!origin) {
-                    searched.add(via);
-                    searchResult(via, des, range, searched, result);
-                    break out;
+            }
+
+            for (Airport via : available) {
+                searched.add(via);
+                searchResult(via, des, range, searched, result);
+                if (!result.isEmpty()) {
+                    break;
                 }
             }
         }
