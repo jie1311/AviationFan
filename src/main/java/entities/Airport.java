@@ -80,7 +80,7 @@ public class Airport {
 
     @Override
     public String toString() {
-        return String.format("{\"iata\":\"%s\", \"city\":\"%s\", \"long\":%f, \"lat\":%f}",
+        return String.format("{\"iata\":\"%s\", \"city\":\"%s\", \"lng\":%f, \"lat\":%f}",
                 iataCode, city, coordinate[0], coordinate[1]);
     }
 }

@@ -60,11 +60,11 @@ public class Initializer implements CommandLineRunner {
     private void airportInitial() {
         airportRepository.deleteAll();
 
-        double[] mel = {-37.673333, 144.843333};
+        double[] mel = {144.843333, -37.673333};
         airportRepository.save(new Airport("MEL", "Melbourne", mel));
-        double[] dxb = {25.252778, 55.364444};
+        double[] dxb = {55.364444, 25.252778};
         airportRepository.save(new Airport("DXB", "Dubai", dxb));
-        double[] lhr = {51.4775, -0.461389};
+        double[] lhr = {-0.461389, 51.4775};
         airportRepository.save(new Airport("LHR", "London", lhr));
 
     }
