@@ -43,7 +43,6 @@ public class Initializer implements CommandLineRunner {
         for (Airport airport : airportRepository.findAll()) {
             System.out.println(airport.getCity());
         }
-
     }
 
     private void aircraftInitial() {

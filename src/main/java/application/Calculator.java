@@ -9,10 +9,10 @@ import java.nio.charset.Charset;
 public class Calculator {
 
     public static int destance(Airport org, Airport des) {
-        double lat1 = org.getCoordinate()[0];
-        double lat2 = des.getCoordinate()[0];
-        double lon1 = org.getCoordinate()[1];
-        double lon2 = des.getCoordinate()[1];
+        double lat1 = org.getCoordinate()[1];
+        double lat2 = des.getCoordinate()[1];
+        double lon1 = org.getCoordinate()[0];
+        double lon2 = des.getCoordinate()[0];
 
         double theta = lon1 - lon2;
         double ditanceRaw = Math.sin(
