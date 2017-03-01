@@ -27,7 +27,7 @@ public class RouteRestController {
         try {
             Airport orgA = airportRepository.findByIataCode(orgS);
             Airport desA = airportRepository.findByIataCode(desS);
-            routeJson += String.format("\"distance\": %d, ", Calculator.destance(orgA, desA));
+            routeJson += String.format("\"distance\":%d, ", Calculator.destance(orgA, desA));
             int rangeInt = Integer.valueOf(rangeS);
             if (Calculator.reachable(orgA, desA, rangeInt)) {
                 routeJson += String.format("\"reachable\":true, \"route\":[%s, %s]", orgA.toString(), desA.toString());
@@ -41,7 +41,7 @@ public class RouteRestController {
                     route.addAll(searchResult(orgA, route.get(route.size() - 1), rangeInt, searched, new ArrayList<>()));
                 }
                 if (route.isEmpty()) {
-                    routeJson += "\"reachable\":false";
+                    routeJson += "\"reachable\":false, \"route\":[]";
                 } else {
                     routeJson += String.format("\"reachable\":true, \"route\":[%s, ", orgA.toString());
                     for (int i = route.size() - 1; i >= 0; i--) {
