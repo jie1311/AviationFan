@@ -16,8 +16,6 @@ import repositories.AirportRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @Controller
 public class CompareCotroller {
@@ -43,14 +41,7 @@ public class CompareCotroller {
             routeString = String.format("Yes. %s-%s is available.",org.getIataCode(), des.getIataCode());
             model.addAttribute("reachable", routeString);
         } else {
-            List searched = new ArrayList<>();
-            searched.add(org);
-            List<Airport> route = searchResult(org, des, aircraft, searched, new ArrayList<>());
-            while (!(route.isEmpty() || Calculator.reachable(route.get(route.size() - 1), org, aircraft))) {
-                searched.clear();
-                searched.add(org);
-                route.addAll(searchResult(org, route.get(route.size() - 1), aircraft, searched, new ArrayList<>()));
-            }
+            ArrayList<Airport> route = Calculator.lessReroute(org, des, aircraft.getRange(), airportRepository);
             for (int i = route.size() - 1; i >= 0; i--) {
                 Airport via = route.get(i);
                 routeString += String.format("-%s", via.getIataCode());
@@ -78,48 +69,5 @@ public class CompareCotroller {
             airports.add(airport);
         }
         model.addAttribute("airports", airports);
-    }
-
-    private List reachableAirports(Airport org, Aircraft aircraft) {
-        List airports = new ArrayList<>();
-        for (Airport des : airportRepository.findAll()) {
-            if (Calculator.reachable(org, des, aircraft) && !org.getId().equals(des.getId())) {
-                airports.add(des);
-            }
-        }
-        return airports;
-    }
-
-    private List<Airport> searchResult(Airport org, Airport des, Aircraft aircraft, List searched, List result) {
-        List<Airport> available = reachableAirports(org, aircraft);
-        boolean found = false;
-        for (Airport via : available) {
-            if (via.getId().equals(des.getId())) {
-                found = true;
-                result.add(org);
-                break;
-            }
-        }
-        if (!found) {
-            for(Iterator<Airport> it = available.iterator(); it.hasNext();){
-                Airport via = it.next();
-                in:
-                for (Airport srd : (ArrayList<Airport>) searched) {
-                    if (srd.getId().equals(via.getId())) {
-                        it.remove();
-                        break in;
-                    }
-                }
-            }
-
-            for (Airport via : available) {
-                searched.add(via);
-                searchResult(via, des, aircraft, searched, result);
-                if (!result.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return result;
     }
 }

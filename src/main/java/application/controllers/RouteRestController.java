@@ -17,8 +17,6 @@ public class RouteRestController {
     @Autowired
     private AirportRepository airportRepository;
 
-
-
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody String getRoute (@RequestParam(value = "org", required = false) String orgS,
                                           @RequestParam(value = "des", required = false) String desS,
@@ -27,19 +25,12 @@ public class RouteRestController {
         try {
             Airport orgA = airportRepository.findByIataCode(orgS);
             Airport desA = airportRepository.findByIataCode(desS);
-            routeJson += String.format("\"distance\":%d, ", Calculator.destance(orgA, desA));
+            routeJson += String.format("\"distance\":%d, ", Calculator.distance(orgA, desA));
             int rangeInt = Integer.valueOf(rangeS);
             if (Calculator.reachable(orgA, desA, rangeInt)) {
                 routeJson += String.format("\"reachable\":true, \"route\":[%s, %s]", orgA.toString(), desA.toString());
             } else {
-                List searched = new ArrayList<>();
-                searched.add(orgA);
-                List<Airport> route = searchResult(orgA, desA, rangeInt, searched, new ArrayList<>());
-                while (!(route.isEmpty() || Calculator.reachable(route.get(route.size() - 1), orgA, rangeInt))) {
-                    searched.clear();
-                    searched.add(orgA);
-                    route.addAll(searchResult(orgA, route.get(route.size() - 1), rangeInt, searched, new ArrayList<>()));
-                }
+                ArrayList<Airport> route = Calculator.lessReroute(orgA, desA, rangeInt, airportRepository);
                 if (route.isEmpty()) {
                     routeJson += "\"reachable\":false, \"route\":[]";
                 } else {
@@ -66,38 +57,5 @@ public class RouteRestController {
             }
         }
         return airports;
-    }
-
-    private List<Airport> searchResult(Airport org, Airport des, int range, List searched, List result) {
-        List<Airport> available = reachableAirports(org, range);
-        boolean found = false;
-        for (Airport via : available) {
-            if (via.getId().equals(des.getId())) {
-                found = true;
-                result.add(org);
-                break;
-            }
-        }
-        if (!found) {
-            for(Iterator<Airport> it = available.iterator(); it.hasNext();){
-                Airport via = it.next();
-                in:
-                for (Airport srd : (ArrayList<Airport>) searched) {
-                    if (srd.getId().equals(via.getId())) {
-                        it.remove();
-                        break in;
-                    }
-                }
-            }
-
-            for (Airport via : available) {
-                searched.add(via);
-                searchResult(via, des, range, searched, result);
-                if (!result.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return result;
     }
 }
