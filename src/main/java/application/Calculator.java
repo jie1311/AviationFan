@@ -7,6 +7,8 @@ import repositories.AirportRepository;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 
@@ -61,64 +63,6 @@ public class Calculator {
         return new String(decodedBytes, Charset.forName("UTF-8"));
     }
 
-    public static ArrayList<Airport> lessReroute(Airport org, Airport des, int range, AirportRepository airportRepository) {
-        ArrayList<Airport> route = Calculator.lessReroute2(org, des, range, airportRepository);
-        while (!(route.isEmpty() || Calculator.reachable(route.get(route.size() - 1), org, range))) {
-            Airport via = route.get(route.size() - 1);
-            route.addAll(Calculator.lessReroute2(org, via, range, airportRepository));
-        }
-        return route;
-    }
-
-    private static ArrayList<Airport> lessReroute2(Airport org, Airport des, int range, AirportRepository airportRepository) {
-        ArrayList<Airport> avlb = new ArrayList<>();
-        ArrayList<Airport> schd = new ArrayList<>();
-        ArrayList<Airport> rslt = new ArrayList<>();
-        return lessReroute3(org, des, range, avlb, schd, rslt, airportRepository);
-    }
-
-    private static ArrayList<Airport> lessReroute3(Airport org, Airport des, int range,
-                                          ArrayList<Airport> avlb,
-                                          ArrayList<Airport> schd,
-                                          ArrayList<Airport> rslt,
-                                          AirportRepository airportRepository) {
-        schd.add(org);
-
-        boolean found = false;
-
-        if (reachable(org, des, range)) {
-            found = true;
-            rslt.add(org);
-        } else {
-            for (Airport airport : reachableAirports(org, range, airportRepository)) {
-                avlb.add(airport);
-            }
-        }
-
-        if (!found) {
-            for(Iterator<Airport> it = avlb.iterator(); it.hasNext();){
-                Airport via = it.next();
-                in:
-                for (Airport srd : schd) {
-                    if (srd.getId().equals(via.getId())) {
-                        it.remove();
-                        break in;
-                    }
-                }
-            }
-
-            for (Airport via : avlb) {
-                lessReroute3(via, des, range, avlb, schd, rslt, airportRepository);
-                if (!rslt.isEmpty()) {
-                    break;
-                } else if (avlb.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return rslt;
-    }
-
     private static ArrayList<Airport> reachableAirports(Airport org, int range, AirportRepository airportRepository) {
         ArrayList<Airport> airports = new ArrayList<>();
         for (Airport des : airportRepository.findAll()) {
@@ -127,6 +71,163 @@ public class Calculator {
             }
         }
         return airports;
+    }
+
+    public static ArrayList<Airport> lessReroute(Airport org, Airport des, int range, AirportRepository airportRepository) {
+        ArrayList<Node> avlb = new ArrayList<>();
+        ArrayList<Node> schd = new ArrayList<>();
+        Node start = new Node(org, des, org);
+        Node result = new Node();
+        lessReroute(org, des, range, avlb, schd, start, result, airportRepository);
+
+        if (!(result.getRoute() == null)) {
+            return result.getRoute();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private static void lessReroute(Airport org, Airport des, int range,
+                                    ArrayList<Node> avlb,
+                                    ArrayList<Node> schd,
+                                    Node start,
+                                    Node result,
+                                    AirportRepository airportRepository) {
+        schd.add(start);
+        boolean found = false;
+
+        found = checkNode(org, des, range, found, start, result, airportRepository);
+
+        if (!found) {
+            openNode(org, des, range, start, avlb, schd, airportRepository);
+            l3:
+            for (Node node : avlb) {
+                lessReroute(node.getVia(), des, range, avlb, schd, node, result, airportRepository);
+                try {
+                    result.getRoute();
+                    break l3;
+                } catch (Exception e) {
+                    if (avlb.isEmpty()) {
+                        break l3;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public static ArrayList<Airport> lessTravel(Airport org, Airport des, int range, AirportRepository airportRepository) {
+        ArrayList<Node> avlb = new ArrayList<>();
+        ArrayList<Node> schd = new ArrayList<>();
+        Node start = new Node(org, des, org);
+        Node result = new Node();
+        lessTravel(org, des, range, avlb, schd, start, result, airportRepository);
+
+        if (!(result.getRoute() == null)) {
+            return result.getRoute();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private static void lessTravel(Airport org, Airport des, int range,
+                                   ArrayList<Node> avlb,
+                                   ArrayList<Node> schd,
+                                   Node start,
+                                   Node result,
+                                   AirportRepository airportRepository) {
+        schd.add(start);
+        boolean found = false;
+
+        found = checkNode(des, found, start, result);
+
+        if (!found) {
+            openNode(org, des, range, start, avlb, schd, airportRepository);
+            sortAStar(avlb);
+            l3:
+            for (Node node : avlb) {
+                lessTravel(node.getVia(), des, range, avlb, schd, node, result, airportRepository);
+                try {
+                    result.getRoute();
+                    break l3;
+                } catch (Exception e) {
+                    if (avlb.isEmpty()) {
+                        break l3;
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean checkNode(Airport org, Airport des, int range,
+                                     boolean found, Node start, Node result,
+                                     AirportRepository airportRepository) {
+        l1:
+        for (Airport airport : reachableAirports(org, range, airportRepository)) {
+            if (airport.getId().equals(des.getId())) {
+                found = true;
+                Node next = new Node(org, des, airport, start);
+                result.setOrg(next.getOrg());
+                result.setDes(next.getDes());
+                result.setVia(next.getVia());
+                result.setLastNode(next.getLastNode());
+                result.setRoute(next.getRoute());
+                result.setG(next.getG());
+                result.setH(next.getH());
+                result.setF(next.getF());
+                break l1;
+            }
+        }
+
+        return found;
+    }
+
+    private static boolean checkNode(Airport des, boolean found, Node current, Node result) {
+        if (current.getVia().getId().equals(des.getId())) {
+            found = true;
+            result.setOrg(current.getOrg());
+            result.setDes(current.getDes());
+            result.setVia(current.getVia());
+            result.setLastNode(current.getLastNode());
+            result.setRoute(current.getRoute());
+            result.setG(current.getG());
+            result.setH(current.getH());
+            result.setF(current.getF());
+        }
+        return found;
+    }
+
+    private static void openNode(Airport org, Airport des, int range,
+                                 Node start,
+                                 ArrayList<Node> avlb,
+                                 ArrayList<Node> schd,
+                                 AirportRepository airportRepository) {
+        for (Airport airport : reachableAirports(org, range, airportRepository)) {
+            Node next = new Node(org, des, airport, start);
+            avlb.add(next);
+        }
+
+        for (Iterator<Node> it = avlb.iterator(); it.hasNext(); ) {
+            Node via = it.next();
+            l2:
+            for (Node srd : schd) {
+                if (srd.getVia().getId().equals(via.getVia().getId())) {
+                    it.remove();
+                    break l2;
+                }
+            }
+        }
+    }
+
+    private static void sortAStar(ArrayList<Node> avlb) {
+        Collections.sort(avlb, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                Integer f1 = o1.getF();
+                Integer f2 = o2.getF();
+                return f1.compareTo(f2);
+            }
+        });
     }
 
 }

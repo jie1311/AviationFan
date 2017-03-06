@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import repositories.AirportRepository;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @RestController
 @RequestMapping("/getRoute")
@@ -20,7 +18,8 @@ public class RouteRestController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody String getRoute (@RequestParam(value = "org", required = false) String orgS,
                                           @RequestParam(value = "des", required = false) String desS,
-                                          @RequestParam(value = "range", required = false) String rangeS) {
+                                          @RequestParam(value = "range", required = false) String rangeS,
+                                          @RequestParam(value = "way", defaultValue = "minr", required = false) String way) {
         String routeJson = "{";
         try {
             Airport orgA = airportRepository.findByIataCode(orgS);
@@ -30,12 +29,19 @@ public class RouteRestController {
             if (Calculator.reachable(orgA, desA, rangeInt)) {
                 routeJson += String.format("\"reachable\":true, \"route\":[%s, %s]", orgA.toString(), desA.toString());
             } else {
-                ArrayList<Airport> route = Calculator.lessReroute(orgA, desA, rangeInt, airportRepository);
+                ArrayList<Airport> route;
+                if (way.equals("minr")) {
+                    route = Calculator.lessReroute(orgA, desA, rangeInt, airportRepository);
+                } else if (way.equals("mint")) {
+                    route = Calculator.lessTravel(orgA, desA, rangeInt, airportRepository);
+                } else {
+                    route = Calculator.lessReroute(orgA, desA, rangeInt, airportRepository);
+                }
                 if (route.isEmpty()) {
                     routeJson += "\"reachable\":false, \"route\":[]";
                 } else {
-                    routeJson += String.format("\"reachable\":true, \"route\":[%s, ", orgA.toString());
-                    for (int i = route.size() - 1; i >= 0; i--) {
+                    routeJson += "\"reachable\":true, \"route\":[";
+                    for (int i = 0; i <= route.size() - 2; i++) {
                         Airport via = route.get(i);
                         routeJson += String.format("%s, ", via.toString());
                     }
@@ -47,15 +53,5 @@ public class RouteRestController {
         }
         routeJson += "}";
         return routeJson;
-    }
-
-    private List reachableAirports(Airport org, int range) {
-        List airports = new ArrayList<>();
-        for (Airport des : airportRepository.findAll()) {
-            if (Calculator.reachable(org, des, range) && !org.getId().equals(des.getId())) {
-                airports.add(des);
-            }
-        }
-        return airports;
     }
 }

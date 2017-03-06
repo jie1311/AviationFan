@@ -42,14 +42,14 @@ public class CompareCotroller {
             model.addAttribute("reachable", routeString);
         } else {
             ArrayList<Airport> route = Calculator.lessReroute(org, des, aircraft.getRange(), airportRepository);
-            for (int i = route.size() - 1; i >= 0; i--) {
+            for (int i = 1; i <= route.size() - 1; i++) {
                 Airport via = route.get(i);
                 routeString += String.format("-%s", via.getIataCode());
             }
             if (route.isEmpty()){
                 routeString = "No.";
             } else {
-                routeString = String.format("No. However, %s%s-%s is available.",org.getIataCode(), routeString, des.getIataCode());
+                routeString = String.format("No. However, %s%s is available.",org.getIataCode(), routeString);
             }
             model.addAttribute("reachable", routeString);
         }
