@@ -20,7 +20,7 @@ public class Node {
         this.des = des;
         this.via = via;
         this.g = 0;
-        this.h = Calculator.distance(org, des);
+        this.h = Calculator.distance(via, des);
         this.f = g + h;
         this.route = new ArrayList<>();
         this.route.add(via);
@@ -32,7 +32,7 @@ public class Node {
         this.via = via;
         this.lastNode = lastNode;
         this.g = lastNode.getG() + Calculator.distance(lastNode.getVia(), via);
-        this.h = lastNode.getH();
+        this.h = Calculator.distance(via, des);
         this.f = g + h;
         this.route = new ArrayList<>();
         this.route.addAll(lastNode.route);
