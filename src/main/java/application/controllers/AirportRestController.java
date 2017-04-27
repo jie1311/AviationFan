@@ -1,10 +1,12 @@
 package application.controllers;
 
-
 import entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import repositories.AirportRepository;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 @RestController
 @RequestMapping("/getAirport")
@@ -16,25 +18,38 @@ public class AirportRestController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody String getAirport (@RequestParam(value="iata", required=false) String iataCode,
                                             @RequestParam(value="city", required=false) String city) {
-        String airportsJson = "[";
+        StringBuilder result = new StringBuilder("[");
         try {
             if (iataCode == null && city == null) {
-                for (Airport airport : repository.findAll()) {
-                    airportsJson += String.format("%s, ", airport.toString());
+                ArrayList<Airport> airports = (ArrayList<Airport>) repository.findAll();
+                this.sortByIata(airports);
+                for (Airport airport : airports) {
+                    result.append(String.format("%s, ", airport.toString()));
                 }
             } else if (iataCode != null) {
-                airportsJson += String.format("%s, ", repository.findByIataCode(iataCode).toString());
+                result.append(String.format("%s, ", repository.findByIataCode(iataCode).toString()));
             } else {
                 for (Airport airport : repository.findByCity(city)) {
-                    airportsJson += String.format("%s, ", airport.toString());
+                    result.append(String.format("%s, ", airport.toString()));
                 }
             }
-            airportsJson = airportsJson.substring(0, airportsJson.length() - 2);
+            result = new StringBuilder(result.substring(0, result.length() - 2));
         } catch (Exception e) {
 
         }
 
-        airportsJson += "]";
-        return airportsJson;
+        result.append("]");
+        return result.toString();
+    }
+
+    private void sortByIata(ArrayList<Airport> airports) {
+        Collections.sort(airports, new Comparator<Airport>() {
+            @Override
+            public int compare(Airport a1, Airport a2) {
+                String iataCode1 = a1.getIataCode();
+                String iataCode2 = a2.getIataCode();
+                return iataCode1.compareTo(iataCode2);
+            }
+        });
     }
 }

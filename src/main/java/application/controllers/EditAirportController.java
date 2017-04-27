@@ -30,7 +30,7 @@ public class EditAirportController {
         if (editAirportForm.getDeletedId() == null && editAirportForm.getEditId() == null) {
             //Add
             try {
-                airportRepository.findByIataCode(editAirportForm.getIataCode()).getCity();
+                airportRepository.findByIataCode(editAirportForm.getIataCode());
                 model.addAttribute("added", "Airport already exists.");
             } catch (Exception e2) {
                 try {
@@ -73,9 +73,7 @@ public class EditAirportController {
 
     private void initalPage(Model model) {
         ArrayList airports = new ArrayList<>();
-        for (Airport airport : airportRepository.findAll()) {
-            airports.add(airport);
-        }
+        airports.addAll(airportRepository.findAll());
 
         model.addAttribute("airports", airports);
         model.addAttribute("editAirportForm", new EditAirportForm());
