@@ -167,9 +167,9 @@ public class Calculator {
         Collections.sort(avlb, new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
-                Integer f1 = o1.getRoute().size();
-                Integer f2 = o2.getRoute().size();
-                return f1.compareTo(f2);
+                Integer s1 = o1.getRoute().size();
+                Integer s2 = o2.getRoute().size();
+                return s1.compareTo(s2);
             }
         });
     }

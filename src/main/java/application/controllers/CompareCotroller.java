@@ -1,5 +1,5 @@
 package application.controllers;
-
+//todo: String iteration; List iteration
 
 import application.Calculator;
 import entities.Aircraft;

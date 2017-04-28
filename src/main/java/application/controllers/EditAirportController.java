@@ -30,7 +30,7 @@ public class EditAirportController {
         if (editAirportForm.getDeletedId() == null && editAirportForm.getEditId() == null) {
             //Add
             try {
-                airportRepository.findByIataCode(editAirportForm.getIataCode());
+                airportRepository.findByIataCode(editAirportForm.getIataCode()).getCity();
                 model.addAttribute("added", "Airport already exists.");
             } catch (Exception e2) {
                 try {

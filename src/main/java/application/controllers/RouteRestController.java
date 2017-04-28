@@ -1,4 +1,5 @@
 package application.controllers;
+//todo: String iteration; List reorder
 
 import application.Calculator;
 import entities.Airport;
