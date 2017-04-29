@@ -2,6 +2,8 @@ package application.controllers;
 //todo: String iteration; List reorder
 
 import application.Calculator;
+import application.JsonBuilder;
+import application.Output;
 import entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +23,17 @@ public class RouteRestController {
                                           @RequestParam(value = "des", required = false) String desS,
                                           @RequestParam(value = "range", required = false) String rangeS,
                                           @RequestParam(value = "way", defaultValue = "minr", required = false) String way) {
-        String routeJson = "{";
+        Output output = new Output();
         try {
             Airport orgA = airportRepository.findByIataCode(orgS);
             Airport desA = airportRepository.findByIataCode(desS);
-            routeJson += String.format("\"distance\":%d, ", Calculator.distance(orgA, desA));
             int rangeInt = Integer.valueOf(rangeS);
             if (Calculator.reachable(orgA, desA, rangeInt)) {
-                routeJson += String.format("\"reachable\":true, \"route\":[%s, %s]", orgA.toString(), desA.toString());
+                ArrayList<Airport> route = new ArrayList<>();
+                route.add(orgA);
+                route.add(desA);
+                output.setSuccess(true);
+                output.setData(JsonBuilder.buildRouteJsonObject(orgA, desA, true, route));
             } else {
                 ArrayList<Airport> route;
                 if (way.equals("minr")) {
@@ -39,20 +44,19 @@ public class RouteRestController {
                     route = Calculator.lessReroute(orgA, desA, rangeInt, airportRepository);
                 }
                 if (route.isEmpty()) {
-                    routeJson += "\"reachable\":false, \"route\":[]";
+                    output.setSuccess(true);
+                    output.setData(JsonBuilder.buildRouteJsonObject(orgA, desA, false, route));
                 } else {
-                    routeJson += "\"reachable\":true, \"route\":[";
-                    for (int i = 0; i <= route.size() - 2; i++) {
-                        Airport via = route.get(i);
-                        routeJson += String.format("%s, ", via.toString());
-                    }
-                    routeJson += String.format("%s]", desA.toString());
+                    output.setSuccess(true);
+                    output.setData(JsonBuilder.buildRouteJsonObject(orgA, desA, true, route));
                 }
             }
         } catch (Exception e) {
-
+            output.setSuccess(false);
+            output.setMessage("Unexpected error happened.");
+            output.setData("{}");
         }
-        routeJson += "}";
-        return routeJson;
+
+        return output.toString();
     }
 }

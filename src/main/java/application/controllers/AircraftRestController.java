@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.JsonBuilder;
+import application.Output;
 import entities.Aircraft;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AircraftRestController {
                                             @RequestParam(value="model", required=false) String model,
                                             @RequestParam(value="submodel", required=false) String submodel) {
         ArrayList<Aircraft> aircrafts = new ArrayList<>();
-        String jsonString;
+        Output output = new Output();
         try {
             if (manufacturer == null) {
                 aircrafts.addAll(repository.findAll());
@@ -33,14 +34,16 @@ public class AircraftRestController {
             } else {
                 aircrafts.addAll(repository.findByManufacturerAndModelAndSubModel(manufacturer, model, submodel));
             }
-
             this.sortTypes(aircrafts);
-            jsonString = JsonBuilder.buildAircraftsJsonArray(aircrafts);
+            output.setSuccess(true);
+            output.setData(JsonBuilder.buildAircraftsJsonArray(aircrafts));
         } catch (Exception e) {
-            jsonString = "[]";
+            output.setSuccess(false);
+            output.setMessage("Unexpected error happened.");
+            output.setData("[]");
         }
 
-        return jsonString;
+        return output.toString();
     }
 
     private void sortTypes (ArrayList<Aircraft> aircrafts) {

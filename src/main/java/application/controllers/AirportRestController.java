@@ -1,5 +1,7 @@
 package application.controllers;
 
+import application.JsonBuilder;
+import application.Output;
 import entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,28 +20,26 @@ public class AirportRestController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody String getAirport (@RequestParam(value="iata", required=false) String iataCode,
                                             @RequestParam(value="city", required=false) String city) {
-        StringBuilder result = new StringBuilder("[");
+        ArrayList<Airport> airports = new ArrayList<>();
+        Output output = new Output();
         try {
             if (iataCode == null && city == null) {
-                ArrayList<Airport> airports = (ArrayList<Airport>) repository.findAll();
-                this.sortByIata(airports);
-                for (Airport airport : airports) {
-                    result.append(String.format("%s, ", airport.toString()));
-                }
+                airports.addAll(repository.findAll());
             } else if (iataCode != null) {
-                result.append(String.format("%s, ", repository.findByIataCode(iataCode).toString()));
+                airports.add(repository.findByIataCode(iataCode));
             } else {
-                for (Airport airport : repository.findByCity(city)) {
-                    result.append(String.format("%s, ", airport.toString()));
-                }
+                airports.addAll(repository.findByCity(city));
             }
-            result = new StringBuilder(result.substring(0, result.length() - 2));
+            this.sortByIata(airports);
+            output.setSuccess(true);
+            output.setData(JsonBuilder.buildAirportsJsonArray(airports));
         } catch (Exception e) {
-
+            output.setSuccess(false);
+            output.setMessage("Unexpected error happened.");
+            output.setData("[]");
         }
 
-        result.append("]");
-        return result.toString();
+        return output.toString();
     }
 
     private void sortByIata(ArrayList<Airport> airports) {
