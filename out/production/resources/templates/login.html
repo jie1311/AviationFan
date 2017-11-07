@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Aviation Fan Management - Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse indexFont indexNav navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle indexNavBt" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://localhost:9000/">Aviation Fan</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="http://localhost:9000/aircraft">Aircraft</a></li>
+                <li><a href="http://localhost:9000/airport">Airports</a></li>
+                <li><a href="http://localhost:9000/route">Routes</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/">Management</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid indexFont topPaddingMuch">
+    <div class="row">
+        <div class="col-sm-8 noBorder filllax">
+        </div>
+        <div class="col-sm-4 topPadding">
+            <form th:action="@{/login}" method="post">
+                <p>User Name: <input type="text" name="username" class="form-control fullWide"/></p>
+                <p>Password: <input type="password" name="password" class="form-control fullWide"/></p>
+                <div th:if="${param.error}">
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}">
+                    You have been logged out.
+                </div>
+                <p><button type="submit" class="btn btn-primary fullWide">Sign In</button></p>
+            </form>
+        </div>
+    </div>
+</div>
+<footer class="footer indexFont navbar-fixed-bottom indexFot">
+    <div class="container">
+        <p class="text-muted topPadding">Aviation Fan (c) 2017</p>
+    </div>
+</footer>
+</body>
+</html>

@@ -43,7 +43,7 @@ public class JsonBuilder {
             result.append(String.format("\"destination:\":%s, ", des.toString()));
             result.append(String.format("\"distance\":%d, ", Calculator.distance(org, des)));
             if (reachable) {
-                result.append(String.format("\"reachable\":true, \"route\":["));
+                result.append("\"reachable\":true, \"route\":[");
                 for (int i = 0; i <= route.size() - 2; i++) {
                     Airport via = route.get(i);
                     result.append(String.format("%s, ", via.toString()));
