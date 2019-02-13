@@ -167,3 +167,6 @@ package-lock.json
 out/production/classes/entities/Airport.class
 .idea/workspace.xml
 .idea/misc.xml
+.idea/workspace.xml
+Aircraft.json
+*.class
