@@ -32,9 +32,9 @@ public class Initializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        aircraftInitial();
-        airportInitial();
-        userInitial();
+//        aircraftInitial();
+//        airportInitial();
+//        userInitial();
 
         for (Aircraft aircraft : aircraftRepository.findAll()) {
             System.out.println(aircraft.getType());
