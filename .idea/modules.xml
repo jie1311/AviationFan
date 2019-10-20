@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AviationFan.iml" filepath="$PROJECT_DIR$/.idea/modules/AviationFan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AviationFan.iml" filepath="$PROJECT_DIR$/.idea/modules/AviationFan.iml" group="AviationFan" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AviationFan_main.iml" filepath="$PROJECT_DIR$/.idea/modules/AviationFan_main.iml" group="AviationFan" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AviationFan_test.iml" filepath="$PROJECT_DIR$/.idea/modules/AviationFan_test.iml" group="AviationFan" />
     </modules>
